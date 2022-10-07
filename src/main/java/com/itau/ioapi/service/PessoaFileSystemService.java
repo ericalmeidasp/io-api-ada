@@ -20,12 +20,14 @@ public class PessoaFileSystemService {
 
         return Files.readString(path)
                 .lines()
+                .parallel()
                 .map(string -> {
+                    //exibe as diferentes threads utilizadas no map.
+                    System.out.println(Thread.currentThread().getName());
                     String[] attr = string.split(",");
                     String nome = attr[0];
                     ZoneId zoneId = ZoneId.of(attr[1]);
                     LocalDateTime localDateTime = LocalDateTime.parse(attr[2]);
-
                     return new Pessoa(nome, zoneId, localDateTime);
                 })
                 .collect(Collectors.toList());

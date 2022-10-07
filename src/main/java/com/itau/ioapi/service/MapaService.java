@@ -37,7 +37,7 @@ public class MapaService {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ZipOutputStream zos = new ZipOutputStream(baos);
         stringList.forEach(string -> {
-            ZipEntry entry = new ZipEntry(string.subSequence(0, 5).toString() + ".txt");
+            ZipEntry entry = new ZipEntry(string.split("\n")[0] + ".txt");
             try {
                 zos.putNextEntry(entry);
                 zos.write(string.getBytes());

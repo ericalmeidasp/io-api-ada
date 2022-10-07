@@ -34,10 +34,10 @@ public class IoapiApplication implements CommandLineRunner {
         // Desserializa o arquivo
         List<Pessoa> pessoas = pessoaFileSystemService.desserialize(path);
 
-        // Imprime as informaçoes no console
-        pessoas.forEach(signosService::imprimirInformacoesSignos);
+        // Imprime as informaçoes no console usando diferentes threads (Sai da ondem a cada execucao)
+        pessoas.stream().parallel().forEach(signosService::imprimirInformacoesSignos);
 
-        // Serializa o mapa quantico de cada pessoa
+        // Serializa o mapa quantico de cada pessoa utilizando o pararel (escreve simultaneamente arquivos diferentes)
         pessoas.stream()
                 .parallel()
                 .map(signosService::getInformacoesSignosEmString)
