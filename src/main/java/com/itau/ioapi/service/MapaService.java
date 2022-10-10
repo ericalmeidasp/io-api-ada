@@ -62,6 +62,7 @@ public class MapaService {
 
     private List<String> transformPessoaListInStringList(List<Pessoa> pessoaList) {
         List<String> stringPessoasList = pessoaList.stream()
+                .parallel() // realizar o processo com multiplos threads
                 .map(signosService::getInformacoesSignosEmString)
                 .map(list -> String.join("\n", list))
                 .collect(Collectors.toList());

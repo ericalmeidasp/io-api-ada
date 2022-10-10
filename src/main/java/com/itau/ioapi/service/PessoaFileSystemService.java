@@ -20,7 +20,7 @@ public class PessoaFileSystemService {
 
         return Files.readString(path)
                 .lines()
-                .parallel()
+                .parallel() // utiliza o parallel para realizar o map com multiplos threads
                 .map(string -> {
                     //exibe as diferentes threads utilizadas no map.
                     System.out.println(Thread.currentThread().getName());
