@@ -14,6 +14,12 @@ public class SignosService {
     }
 
     public List<String> getInformacoesSignosEmString(Pessoa pessoa) {
+        System.out.println( "Passando no getInformacoes -> Thread: "+Thread.currentThread().getName());
+//        try {
+//            Thread.sleep(10);
+//        } catch (InterruptedException e) {
+//            throw new RuntimeException(e);
+//        }
         List<String> stringList = new ArrayList<>();
         stringList.add(pessoa.getPrimeiroNomeMaisculo());
         stringList.add(String.format("NOME COMPLETO: %s", pessoa.getNome()));

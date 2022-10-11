@@ -23,7 +23,7 @@ public class PessoaFileSystemService {
                 .parallel() // utiliza o parallel para realizar o map com multiplos threads
                 .map(string -> {
                     //exibe as diferentes threads utilizadas no map.
-                    System.out.println(Thread.currentThread().getName());
+                    System.out.println("Lendo com a Thread -> " + Thread.currentThread().getName());
                     String[] attr = string.split(",");
                     String nome = attr[0];
                     ZoneId zoneId = ZoneId.of(attr[1]);

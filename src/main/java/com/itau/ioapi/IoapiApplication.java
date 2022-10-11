@@ -12,7 +12,11 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 @SpringBootApplication
 @RequiredArgsConstructor
@@ -34,18 +38,41 @@ public class IoapiApplication implements CommandLineRunner {
         // Desserializa o arquivo
         List<Pessoa> pessoas = pessoaFileSystemService.desserialize(path);
 
-        // Imprime as informaçoes no console usando diferentes threads (Sai da ondem a cada execucao)
+        // Imprime as informaçoes no console com multiplas threads (muda a ordem nas execuçoes)
         pessoas.stream().parallel().forEach(signosService::imprimirInformacoesSignos);
 
-        // Serializa o mapa quantico de cada pessoa utilizando o pararel (escreve simultaneamente arquivos diferentes)
+//        Executor executors = Executors.newFixedThreadPool(20);
+//
+//        final List<CompletableFuture<List<String>>> pessoaFuture = pessoas
+//                .stream()
+//                .map(p -> {
+//                    System.out.println("Passando no Map -> Thread: " + Thread.currentThread().getName());
+//                    return
+//                        CompletableFuture
+//                                .supplyAsync(() -> signosService.getInformacoesSignosEmString(p), executors);
+//                        }
+//                )
+//                .collect(Collectors.toList());
+//
+//
+//        List<List<String>> pessoasList = pessoaFuture
+//                .stream()
+//                .map(CompletableFuture::join)
+//                .collect(Collectors.toList());
+//
+//        pessoasList.forEach(getConsumerForSerialize());
+
         pessoas.stream()
                 .parallel()
                 .map(signosService::getInformacoesSignosEmString)
                 .forEach(getConsumerForSerialize());
+
     }
+//
 
     private Consumer<List<String>> getConsumerForSerialize() {
         return stringList -> {
+            System.out.println("Gravacao de Arquivos: " + Thread.currentThread().getName());
             Path newPathForPessoa = Paths.get(HOME_DIR, "mapas", "quantico", stringList.get(0) + ".txt");
             try {
                 pessoaFileSystemService.serialize(stringList, newPathForPessoa);
